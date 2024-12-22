@@ -54,6 +54,31 @@ def update_pizza(pizza_id: int, pizza: pizza):
         session.commit()
         session.refresh(existing_pizza)
         return existing_pizza
+        
+@app.get("/pizzaorder/", response_model=List[order])
+def read_order():
+    with Session(engine) as session:
+        order = session.exec(select(pizzaorder)).all()
+        return order
+
+@app.get("/pizzaorder/{order_id}", response_model=order)
+def read_order(order_id: int):
+    with Session(engine) as session:
+        order_1 = session.get(pizzaorder, order_id)
+        if not order_1:
+            raise HTTPException(status_code=404, detail="Order not found")
+        return order_1
+
+@app.delete("/pizzaorder/{order_id}", response_model=order)
+def delete_order(order_id: int):
+    with Session(engine) as session:
+        order_2 = session.get(pizzaorder, order_id)
+        if not order_2:
+            raise HTTPException(status_code=404, detail="Order not found")
+        session.delete(order_2)
+        session.commit()
+        return order_2
+
 
 
 # Аналогичные CRUD операции можно добавить для других моделей (Customer, PizzaOrder, Employee, Payment)
