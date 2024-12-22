@@ -7,17 +7,23 @@ class pizza(SQLModel, table=True):
     id: int = Field(default=None, primary_key=True)
     name: str
     price: float
+    description: str
+    category: str
     
 class customer(SQLModel, table=True):
     id: int = Field(default=None, primary_key=True)
     name: str
     email: str
+    telephone: str
+    address: str
     
 class pizzaorder(SQLModel, table=True):
     id: int = Field(default=None, primary_key=True)
     customer_id: str = Field(foreign_key="customer.id")
     pizza_id: str = Field(foreign_key="pizza.id")
     quantity: int
+    total_price: int
+    cook: int = Field(foreign_key="employee.id")
     
 class employee(SQLModel, table=True):
     id: int = Field(default=None, primary_key=True)
